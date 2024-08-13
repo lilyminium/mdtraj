@@ -360,9 +360,15 @@ class PDBTrajectoryFile(object):
                         atomSerial = atom.serial
                     else:
                         atomSerial = atomIndex
+                    if not isinstance(atomSerial, int):
+                        atomSerial = atomIndex
+
+                    resSeq = res.resSeq % 10000
+                    if not isinstance(resSeq, int):
+                        resSeq = 1
                     line = "ATOM  %5d %-4s %3s %1s%4d    %s%s%s  1.00 %5s      %-4s%2s  " % ( # Right-justify atom symbol
                         atomSerial % 100000, atomName, resName, chainName,
-                        (res.resSeq) % 10000, _format_83(coords[0]),
+                        resSeq, _format_83(coords[0]),
                         _format_83(coords[1]), _format_83(coords[2]),
                         bfactors[posIndex], atom.segment_id[:4], symbol[-2:])
                     assert len(line) == 80, 'Fixed width overflow detected'
